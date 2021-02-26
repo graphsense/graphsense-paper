@@ -1,0 +1,44 @@
+% !TeX root = ../main.tex
+
+\section{TagPacks}
+\label{sec:tagpacks}
+
+Attribution tags are any form of context information that can be attributed to an address, transaction, or cluster, such as the name of an exchange hosting the associated wallet or some other personally identifiable information (PII) of the account holder. The strength of the attribution approach lies in combining address clusters with attribution tags: a tag attributed to a single address being controlled by some cryptoasset service, which typically forms a large address cluster, can easily de-anonymize hundreds of thousands of addresses.
+
+In our previous work~\cite{Froewis:2020a}, we have already highlighted the important role of attribution tags in modern cryptoasset analytics and identified key legal requirements for the forensic processing of data. We pointed out that the \emph{provenance} of attribution tags is a critical foundation for assessing their quality and authenticity, as well as for enabling trust and allowing reproducibility. If used for law enforcement purposes, the provenance even becomes a legal requirement.
+
+In the following, we describe how we collect and organize attribution tags in so-called TagPacks, how we shared and collaboratively managed them using Git, and how we intend to establish attribution tag interoperability among tools by using an agreed-upon taxonomy.
+
+\subsection{TagPack Structure}
+
+A TagPack defines a structure for collecting and packaging attribution tags with additional shared provenance metadata (e.g., title, creator, etc.). TagPacks are represented as YAML files, which can easily be created by hand or exported automatically from other systems. Listing~\ref{lst:sample_tagpack} shows a minimal TagPack, which attributes addresses from different ledgers (BTC, BCH, ZEC) to the ``Internet Archive'', which is a non-profit organization in the US. It also records the \emph{creator} of this TagPack, its last modification date (\emph{lastmod}), the type of entity controlling these addresses (\emph{category}), as well as the information \emph{source}.
+
+\lstset{style=mystyle}
+\lstinputlisting[
+	label={lst:sample_tagpack},
+	caption={Minimal TagPack Example}]
+	{listings/sample_tag_pack.yaml}
+
+A TagPack consists of a \emph{header} and a \emph{body} section. The header lists several mandatory and optional metadata fields and the body provides the list of tags. The range of possible properties for header and body entries is defined in a TagPack Schema. In the above example, the properties \emph{title} and \emph{creator} are part of the TagPack header, the list of tags represents the body.
+
+To avoid that property values need to be repeated for all tags in a TagPack, body fields can also be abstracted and added to the header, thereby being inherited by all body elements, as shown in the following example. In the example above, the label \emph{Internet Archive} is a body-level tag property, which has been added to the header to avoid repetition. It is also possible to override abstracted fields in the body. This could be relevant if someone creates a TagPack comprising several tags and then adds additional tags later on, which then, of course, have different property values.
+
+GraphSense also provides a dedicated TagPack Management Tool\footnote{\url{https://github.com/graphsense/graphsense-tagpack-tool}}, which allows validation of TagPacks against the TagPack schema and referenced taxonomies before they are ingested into the NoSQL storage back-end and processes as part of the transformation step.
+
+\subsection{Collaborative Tag Sharing}
+
+Instead of defining and building a data provenance model and management system from scratch, GraphSense adopts Git for storing and publishing attribution tags. Git has its origin in distributed software development and has, over the last decade, become the de-facto standard for publishing and tracking changes in source code files. It automatically creates hashes over each file and allows, if required, users to digitally sign their contents after each commit. Git is increasingly used for sharing smaller and even large datasets (Git LFS\footnote{\url{https://git-lfs.github.com}}).
+
+\subsection{Attribution Tag Interoperability}
+
+The use of common terminologies is essential for data sharing and establishing interoperability across tools. Therefore, the TagPack schema defines two properties that take concepts from agreed-upon taxonomies as values:
+
+\begin{itemize}
+
+	\item \emph{category}: defines the type of real-world entity that is in control of a given address. Possible concepts (e.g., Exchange, Marketplace) are defined in the INTERPOL Darkweb and Cryptoassets Entity Taxonomy\footnote{\url{https://github.com/INTERPOL-Innovation-Centre/DW-VA-Taxonomy\#entities}}.
+
+	\item \emph{abuse}: if an address was involved in some abusive behavior, this property's value defines the type of abuse and can take values from the INTERPOL Darkweb and Cryptoassets Abuse Taxonomy\footnote{\url{https://github.com/INTERPOL-Innovation-Centre/DW-VA-Taxonomy\#abuse}}.
+
+\end{itemize}
+
+In the example TagPack provided in Listing~\ref{lst:sample_tagpack}, for instance, the real world actor controlling these addresses is categorized as \emph{organization}, which directly maps to a concept that is uniquely identified via a URI\footnote{\url{https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities\#organization}} as part of the INTERPOL Darknet Entity Taxonomy. If all cryptoasset analytics tools categorize attribution tags according to these taxonomies and also use the provided definitions, then attribution data can be harmonized across tools and the first step towards better interoperability can be achieved.

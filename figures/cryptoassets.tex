@@ -1,0 +1,66 @@
+\documentclass[crop,tikz]{standalone}
+\input{../packages}
+
+\begin{document}
+
+\begin{tikzpicture}
+	[extendrect/.style 2 args = {
+		draw=black, text centered, 
+		inner sep=0pt, outer sep=0pt, 
+		fit=(#1) (#2)}]
+	\tikzstyle{rect} = [rectangle, text centered, draw=black, minimum height = .6cm]
+	
+	\newcommand\Xdelta{.2cm}
+	\newcommand\Ydelta{.8cm}
+
+	% examples
+	\node [rect, fill=blue!40](zcash) at (0, 0) {Zcash};
+	\node [rect, left = \Xdelta of zcash, fill=blue!40] (monero) {Monero};
+	\node [rect, left = \Xdelta of monero, fill=blue!40] (litecoin) {Litecoin};
+	\node [rect, left = \Xdelta of litecoin, fill=blue!40] (bitcoin) {Bitcoin};
+	\node [rect, right = \Xdelta of zcash, fill=blue!40] (dai) {DAI};
+	\node [rect, right = \Xdelta of dai, fill=blue!40] (tether) {Tether};
+	\node [rect, right = \Xdelta of tether, fill=red!60] (polymath) {Polymath};
+	\node [rect, right = \Xdelta of polymath, fill=orange!60] (golem) {Golem};
+	\node [rect, right = \Xdelta of golem, fill=orange!60] (ens) {ENS};
+	\node [rect, right = \Xdelta of ens, fill=orange!60] (cryptokitties) {Cryptokitties};
+
+	% privacy
+	\coordinate (privacyBL) at ($(monero.south west)+(0,\Ydelta)$);
+	\coordinate (privacyTR) at ($(zcash.north east)+(0,\Ydelta)$);
+	\node [extendrect={privacyBL}{privacyTR}, fill=blue!40, label={[shift={(0, -.6cm)}]Privacy Focused}] (privacy) {};
+
+	% transparent
+	\coordinate (transparentBL) at ($(bitcoin.south west)+(0,\Ydelta)$);
+	\coordinate (transparentTR) at ($(litecoin.north east)+(0,\Ydelta)$);
+	\node [extendrect={transparentBL}{transparentTR}, fill=blue!40, label={[shift={(0, -.6cm)}]Transparent}] (transparent) {};
+
+	% fungible
+	\coordinate (fungibleBL) at ($(dai.south west)+(0,\Ydelta)$);
+	\coordinate (fungibleTR) at ($(golem.north east)+(0,\Ydelta)$);
+	\node [extendrect={fungibleBL}{fungibleTR}, label={[shift={(0, -.6cm)}]Fungible Tokens}] (fungible) {};
+
+	% non-fungible
+	\coordinate (non-fungibleBL) at ($(ens.south west)+(0,\Ydelta)$);
+	\coordinate (non-fungibleTR) at ($(cryptokitties.north east)+(0,\Ydelta)$);
+	\node [extendrect={non-fungibleBL}{non-fungibleTR}, fill=orange!60, label={[shift={(0, -.6cm)}]Non-Fungible Tokens}] (non-fungible) {};
+
+	% native
+	\coordinate (nativeBL) at ($(transparent.south west)+(0,\Ydelta)$);
+	\coordinate (nativeTR) at ($(privacy.north east)+(0,\Ydelta)$);
+	\node [extendrect={nativeBL}{nativeTR}, label={[shift={(0, -.6cm)}]Native Cryptocurrencies}] (native) {};
+
+	% token
+	\coordinate (tokenBL) at ($(fungible.south west)+(0,\Ydelta)$);
+	\coordinate (tokenTR) at ($(non-fungible.north east)+(0,\Ydelta)$);
+	\node [extendrect={tokenBL}{tokenTR}, label={[shift={(0, -.6cm)}]Tokens}] (token) {};
+
+	% virtual
+	\coordinate (virtualBL) at ($(native.south west)+(0,\Ydelta)$);
+	\coordinate (virtualTR) at ($(token.north east)+(0,\Ydelta)$);
+	\node [extendrect={virtualBL}{virtualTR}, label={[shift={(0, -.6cm)}]Cryptoassets}] (virtual) {};
+
+
+\end{tikzpicture}
+
+\end{document}

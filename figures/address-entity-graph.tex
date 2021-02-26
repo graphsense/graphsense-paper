@@ -1,0 +1,56 @@
+% address-entity-graph.tex
+\documentclass[crop,tikz]{standalone}
+
+\input{../packages}
+
+\begin{document}
+
+\begin{tikzpicture}
+	\newcommand\ARadio{1cm}
+	\newcommand\ERadio{1.95cm}
+
+
+	\newcommand\Ydistance{2cm}
+	\newcommand\Xdistance{4cm}
+	\newcommand\LineWidth{.3mm}
+	\newcommand\XLabelShift{.65cm}
+	\newcommand\YLabelShift{-.45cm}
+	\newcommand\eYPropShift{-.175cm}
+	\newcommand\eXPropShift{1.3cm}
+	\newcommand\aYPropShift{-.2cm}
+	\newcommand\aXPropShift{.55cm}
+
+	\tikzstyle{anode} = [circle, text centered, draw=black, minimum size = \ARadio, fill=AITbordeaux!40]
+	\tikzstyle{enode} = [rectangle, rounded corners, text centered, draw=black, minimum height = \ERadio, minimum width = \ERadio, fill=AITturquoise!40]
+
+
+	\node [anode](a1) at (0, 0) {\addressIDn{1}};
+	\node [anode, below = of a1](a2) {\addressIDn{2}};
+	\node [anode, right = \Xdistance of a1](a3) {\addressIDn{3}};
+	\node [anode, right = \Xdistance of a2](a4) {\addressIDn{4}};
+
+	\begin{scope}[on background layer]
+		\node [enode, minimum height = 2*\ERadio, label={[shift={(\XLabelShift, \YLabelShift)}]\entityIDn{1}}](e1) at ($(a1)!0.5!(a2)$) {};
+		\node [enode, label={[shift={(\XLabelShift, \YLabelShift)}]\entityIDn{2}}](e2) at (a3) {};
+		\node [enode, label={[shift={(\XLabelShift, \YLabelShift)}]\entityIDn{3}}](e3) at (a4) {};		
+	\end{scope}
+	\node [above = \eYPropShift of e1, label={[shift={(\eXPropShift, \eYPropShift)}]\{\entityPairs{1}\}}] (e1prop) {};
+	\node [above = \eYPropShift of e2, label={[shift={(\eXPropShift, \eYPropShift)}]\{\entityPairs{2}\}}] (e2prop) {};
+	\node [above = \eYPropShift of e3, label={[shift={(\eXPropShift, \eYPropShift)}]\{\entityPairs{3}\}}] (e3prop) {};
+
+	\node [above = \eYPropShift of a1, label={[shift={(-\aXPropShift, \aYPropShift)}]\{\addressPairs{1}\}}] (a1prop) {};
+	\node [above = \eYPropShift of a2, label={[shift={(-\aXPropShift, \aYPropShift)}]\{\addressPairs{2}\}}] (a2prop) {};
+	\node [above = \eYPropShift of a3, label={[shift={(-\aXPropShift, \aYPropShift)}]\{\addressPairs{3}\}}] (a3prop) {};
+	\node [above = \eYPropShift of a4, label={[shift={(-\aXPropShift, \aYPropShift)}]\{\addressPairs{4}\}}] (a4prop) {};
+
+
+	\draw [color=AITbordeaux, text=black, line width=\LineWidth, ->] (a1) -- (a3) node [midway, above] {\{\addressEdgePairs{1}{3}\}};
+	\draw [color=AITbordeaux, text=black, line width=\LineWidth, ->] (a2) -- (a4) node [midway, below] {\{\addressEdgePairs{2}{4}\}};
+	\draw [color=AITbordeaux, text=black, line width=\LineWidth, ->] (a1) -- (a4) node [pos=.7, above, sloped] {\{\addressEdgePairs{1}{4}\}};
+	\draw [color=AITturquoise, text=black, line width=\LineWidth, ->] (e1.east) -- (e2) node [midway, above, sloped] {\{\entityEdgePairs{1}{2}\}};
+	\draw [color=AITturquoise, text=black, line width=\LineWidth, ->] (e1.east) -- (e3) node [pos=.3, below, sloped] {\{\entityEdgePairs{1}{3}\}};
+
+
+\end{tikzpicture}
+
+\end{document}

@@ -1,0 +1,72 @@
+% This is samplepaper.tex, a sample chapter demonstrating the
+% LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.20 of 2017/10/04
+%
+\documentclass[runningheads]{llncs}
+
+\input{packages}
+\input{macros-generic}
+
+% commands & variables
+\newcommand{\gsversion}{0.4.5\xspace}
+
+
+% Used for displaying a sample figure. If possible, figure files should
+% be included in EPS format.
+%
+% If you use the hyperref package, please uncomment the following line
+% to display URLs in blue roman font according to Springer's eBook style:
+% \renewcommand\UrlFont{\color{blue}\rmfamily}
+
+\begin{document}
+%
+\title{GraphSense: A General-Purpose Cryptoasset Analytics Platform}
+
+%
+%\titlerunning{Abbreviated paper title}
+% If the paper title is too long for the running head, you can set
+% an abbreviated paper title here
+%
+\author{
+   Bernhard Haslhofer\inst{1} \and
+   Rainer St\"{u}tz\inst{1} \and
+   Matteo Romiti\inst{1} \and
+   Ross King\inst{1}
+}
+%%
+%\authorrunning{R. St\"u{}tz et al.}
+%% First names are abbreviated in the running head.
+%% If there are more than two authors, 'et al.' is used.
+%%
+\institute{
+    AIT Austrian Institute of Technology\\
+    Vienna, Austria
+}
+
+%
+\maketitle              % typeset the header of the contribution
+%
+
+\pagestyle{plain}
+
+\noindent
+\vspace{10pt}
+\makebox[\linewidth]{Version \gsversion}
+
+\input{sections/abstract}
+
+\keywords{cryptoassets, analytics, blockchain}
+
+\input{sections/introduction}
+\input{sections/background}
+\input{sections/design}
+\input{sections/tagpacks}
+\input{sections/discussion}
+\input{sections/conclusions}
+
+%\input{sections/acknowledgment}
+
+\bibliographystyle{splncs04}
+\bibliography{references}
+
+\end{document}

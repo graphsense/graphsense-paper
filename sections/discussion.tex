@@ -1,0 +1,20 @@
+% !TeX root = ../main.tex
+\section{Discussion}\label{sec:discussion}
+
+% Implications
+Given current developments in the cryptoasset field, we strongly believe that there will a need for a deeper quantitative understanding of both individual and aggregate transaction flows, and of the technical and socio-economic aspects of increasingly complex cryptocurrency ecosystems. Networks are natural abstractions for such systems as they provide the basis for task-specific measurement and simulation methods. With GraphSense we provide the required computational infrastructure and pre-computed network abstractions for implementing such methods. With its modular, horizontally scalable system architecture, GraphSense also provides the flexibility to quickly react to upcoming, yet unforeseen developments and methodological challenges in this field.
+
+% Limitations
+\paragraph{Limitations} GraphSense is a steadily evolving system and also faces some yet unresolved limitations. First, the price of horizontal scalability is that GraphSense runs on a distributed hardware infrastructure. The operation of such an infrastructure requires a specific skill-set, which is hard to find and also requires relatively large initial investment costs. However, we argue that hosting GraphSense externally (e.g., in commercial cloud infrastructure) might become even more costly with increasing data volumes and involve yet unforeseen technical, organizational, and financial dependencies.
+
+Lack of real-time updates is another inherent limitation of the overall system architecture, which has been designed for data analytics workflows. The bottleneck lies in updating the address clusters and in re-computing the graph abstractions, which can, depending on the dimensions of the hardware cluster, take several hours. However, we argue that real-time investigations are hardly ever needed, because most analytics tasks, for instance, the forensic analysis of a ransomware attack, are conducted in retrospect.
+
+The third limitation we are facing at the moment is the lack of incentive for collecting and sharing attribution tags. The industry has the means for collecting but not the incentive for sharing for competitive reasons; in academia, there is an incentive for sharing, for scientific reproducibility for example, but typically few resources for collecting.
+
+Finally, we also would like to point out that the overall analytics pipeline could still be optimized. Address clusters, for instance, are currently computed centrally, which involves unnecessary communication costs. Alternatively, one could use partition-aware connected component detection algorithms, which promise to be more efficient~\cite{park:2020a} but have not yet been evaluated within GraphSense.
+
+% Outlook
+\paragraph{Outlook} GraphSense follows an agile release plan with major and minor releases. With the next upcoming minor release (0.4.6), it should be possible to deploy GraphSense on a single server and retrieve pre-computed dumps from a periodically updated data repository. The next major release (0.5.X) will support account model ledgers, starting with Ethereum. Depending on the adoption of off-chain payment channels, a future major release (0.6.X) might also support analysis of payment channel transactions across ledgers (c.f.~\cite{Romiti:2021a}).
+
+We also envision GraphSense to become a key technology in a research sub-field, which we call \emph{CryptoFinance}\footnote{\url{https://www.csh.ac.at/complexity-science/Cryptofinance/}}. The goal is to systemically assess emerging technologies and paradigms like Decentralized Finance (DeFi), to learn more about opportunities and risks associated with these developments, and to ultimately come up with measures that help us in quantifying systemic risks in cryptoasset ecosystems. Efficient and effective computations over graph and network abstractions will certainly play a central role in this effort.
+

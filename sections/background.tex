@@ -1,0 +1,52 @@
+% !TeX root = ../main.tex
+
+\section{Background and Design Rationale}
+\label{sec:background}
+
+\subsection{Cryptoasset Analytics}
+
+In our terminology, we denote an \emph{asset} as something that has some value for someone. Building on this, we denote a \emph{cryptoasset} as a virtual asset that utilizes cryptography and some form of ledger technology, which may be distributed or not, for recording and sharing value transfers. As depicted in Figure~\ref{fig:cryptoassets}, we can roughly divide the spectrum of cryptoassets into \emph{native cryptocurrencies} like Bitcoin, and \emph{tokens} as they are deployed on account-model ledgers like Ethereum.
+
+\begin{figure}
+  \centering
+  \adjustbox{max width=\columnwidth}{%
+    \includestandalone{figures/cryptoassets}
+  }
+  \caption[]{
+    The spectrum of cryptoassets. Technically, one can distinguish between \emph{Native Cryptocurrencies} and \emph{Tokens} deployed on platforms like Ethereum. From a usage perspective, one can distinguish between
+    Payment Tokens
+    (\tikz \fill[color=blue!40] (0,.6) rectangle (.7cm, .5cm);), 
+    Security Tokens
+    (\tikz \fill[color=red!60] (0,.6) rectangle (.7cm, .5cm);), and
+    Utility Tokens
+    (\tikz \fill[color=orange!60] (0,.6) rectangle (.7cm, .5cm);).
+  }
+  \label{fig:cryptoassets}
+\end{figure}
+
+A \emph{cryptoasset ecosystem} represents a community of actors, who interact as a system and are linked together through cryptoasset transfers. 
+The goal of \emph{cryptoasset analytics} is to develop and apply quantitative methods to understand the technical and socio-economic aspects of cryptoasset ecosystems. This has been our underlying motivation for building GraphSense.
+
+The required algorithmic building blocks for enabling cryptoasset analytics depend on the conceptual design of a distributed ledger. Ledgers that follow Bitcoin's \emph{unspent transaction outputs} (UTXO) model, which includes Bitcoin derivatives like Litecoin and Zcash, allows a single transaction to have multiple inputs and outputs. We can compute various types of graph abstractions from the underlying blockchain~\cite{Reid:2013aa} such as the \emph{transaction graph}, which is a directed temporal graph connecting transactions by their inputs and outputs. Further, we can compute the \emph{address graph}, a bi-directed cyclic graph in which a node represents an address and an edge represents the set of transactions two addresses were involved in as input or output. Addresses can further be linked using various \emph{address clustering heuristics}, most importantly the so-called multiple-input or co-spent heuristic, which groups addresses that are likely controlled by the same real-world actor based on common use and reuse in transactions~\cite{Meiklejohn:2013aa}. After applying the clustering algorithm, one can build another graph abstraction: the so-called \emph{entity-graph}, which is a bi-directed, cyclic graph in which a node represents the set of addresses that are likely controlled by the same real-world actor (e.g., an exchange) and an edge that represents the aggregate set of transactions between two address sets (entities).
+
+% Account model cluster
+Other ledgers like Ethereum, NEO, or EOS follow a different conceptual model called the \emph{account model}. In that model, a single transaction has exactly one source and one destination account address. While it is still possible to compute the transaction and address graph, existing heuristics based on multiple inputs or outputs cannot be used. However, recent work has shown that address clustering is also possible for Ethereum's account model based on heuristics derived from the analysis of usage patterns surrounding deposit addresses, airdrops, or token transfer authorization~\cite{Victor:2020b}.
+
+\subsection{Design Rationale}
+
+The current system design of GraphSense reflects a number of observations and requirements that have registered over the past several years.
+
+% Rationale 1: Data sovereignty & programmatic access to full data
+\paragraph{Data sovereignty} We observe that programmatic access to the full data, which includes blockchain data as well as attribution tags, is essential for efficient and effective analytics going beyond following individual transactions. When analyzing entire markets, as we did for Ransomware~\cite{PaquetClouson:2019aa} or Sextortion~\cite{PaquetClouson:2019bb}, one must extract relevant data points related to thousands of addresses in a single analytics task. Predefined interfaces, whether graphical dashboards or programmatic REST APIs, always somehow limit the scope of cryptocurrency analyses. Therefore, GraphSense follows a full data sovereignty strategy and provides programmatic access to the full underlying data, and thereby supports advanced usage scenarios.
+
+% Rationale 2: Address and Entity Graph Abstractions
+\paragraph{Pre-computed Graph Abstractions} Nowadays, cryptoasset transactions can be inspected with a wide variety of publicly available blockchain explorers such as \texttt{blockchain.com}\footnote{\url{https://www.blockchain.com}} or \texttt{etherscan.io}\footnote{\url{https://etherscan.io}}. Next to providing details on individual blocks and transactions they also support navigation along the \emph{transaction graph}, which means users can navigate from a certain transaction output address to the next transaction that uses that address as input and vice versa. While this is certainly useful and important, we observed that many analytics tasks focus on the investigation of monetary flows between cryptoasset addresses, or more importantly between the real-world actors (e.g., exchanges) that somehow control these addresses, hence the cryptoasset entities. Therefore, GraphSense provides higher-level graph abstractions, namely the \emph{address- and entity-graph} for various cryptoassets. Since computing these graph abstractions is computationally expensive, GraphSense pre-computes them and makes them available for subsequent analytics tasks.
+
+% Rationale 3: Collaborative Address Tagging
+\paragraph{Collaborative Address Tagging} We are aware that \emph{attribution tags}, which associate cryptoasset addresses and entities with some real-world actor, are essential for conducting effective analyses. They can, for instance, be collected manually by interacting with certain services and assigning human-readable labels to addresses controlled by these services. Since this is a costly and resource-intensive task, we propose TagPacks, which is a simple file-structure for organizing and exchanging attribution tags. TagPacks can be collected and collaboratively maintained using Git\footnote{\url{https://git-scm.com}}, which is a free version control system that provides the technical means for recording data-provenance information. This aspect is important because documented evidence of the origin of data is increasingly emphasized or required in both academia and legal proceedings (c.f.~\cite{Froewis:2020a}).
+
+% Rational 4: Scalability & Modularity & Extensibility
+\paragraph{Scalability \& Extensibility} We note that the volume of transactional data in blockchains is growing and new ledgers are appearing. In the long-run, in-memory graph representations might face \emph{scalability} issues when working with higher-level graph abstractions computed over several ledgers. We also follow the reasoning behind BlockSci and point out that most of the relevant data come from append-only data structures, which makes the ACID properties of general-purpose databases unnecessary. Therefore, we decided to build GraphSense on-top of a standard data science technology stack, which uses Apache Cassandra\footnote{\url{https://cassandra.apache.org}} as a NoSQL storage engine and Apache Spark\footnote{\url{https://spark.apache.org}} as an analytics engine. Both technologies can increase capacities by connecting additional hardware and therefore respond to growing data volumes. We also take into account that cryptoasset analysis is a highly dynamic field in which new ledgers are constantly being added or existing ones are changing. Therefore, we designed GraphSense as a modular and extensible analytics pipeline consisting of multiple, standalone building blocks, which can be updated, extended, and possibly replaced as needed.
+
+% Rationale 5: Transparency & Open Source
+\paragraph{Transparency \& Open Source} GraphSense leverages other open source efforts like BlockSci and uses them in an integrated analytics pipeline. In return, all GraphSense components are published as open-source software on GitHub under an MIT license\footnote{\url{https://opensource.org/licenses/MIT}} and can be re-used for commercial and non-commercial purposes. In this manner, GraphSense also fulfills the requirement of algorithmic transparency, which is another important condition for safeguarding the evidential value of cryptoasset investigations.

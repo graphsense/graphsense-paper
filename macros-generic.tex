@@ -1,0 +1,57 @@
+\newcommand{\TODO}[1]{
+  \if\relax\detokenize{#1}\relax
+    \textcolor{red}{TODO}
+  \else
+    \textcolor{red}{ {#1}}
+  \fi
+}
+
+
+\newcommand{\includestandalonewithpath}[3][]{%
+  \begingroup%
+  \newcommand{\imgpath}{#2}%
+  \includestandalone[#1]{\imgpath/#3}%
+  \endgroup
+}
+
+\newcommand\addressID{\ensuremath{a}\xspace}
+\newcommand\addressIDn[1]{\ensuremath{\addressID_#1}\xspace}
+\newcommand\addressPairs[1]{\ensuremath{P_{\addressID_#1}}}
+\newcommand\addressEdgePairs[2]{\ensuremath{P_{\addressID_#1,\addressID_#2}}}
+
+\newcommand\entityID{\ensuremath{e}\xspace}
+\newcommand\entityIDn[1]{\ensuremath{\entityID_#1}\xspace}
+\newcommand\entityPairs[1]{\ensuremath{P_{\entityID_#1}}}
+\newcommand\entityEdgePairs[2]{\ensuremath{P_{\entityID_#1,\entityID_#2}}}
+
+\newcommand\aTransactionSet[2]{\ensuremath{T_{\addressID_#1,\addressID_#2}}\xspace}
+\newcommand\eTransactionSet[2]{\ensuremath{T_{\entityID_#1,\entityID_#2}}\xspace}
+
+
+\definecolor{AITturquoise}{RGB}{64,170,155}
+\definecolor{AITbordeaux}{RGB}{121,11,26}
+\definecolor{bluekeywords}{rgb}{0.13, 0.13, 1}
+\definecolor{greencomments}{rgb}{0, 0.5, 0}
+\definecolor{redstrings}{rgb}{0.9, 0, 0}
+\definecolor{graynumbers}{rgb}{0.5, 0.5, 0.5}
+
+\lstdefinestyle{mystyle}{
+   	autogobble,
+    columns=fullflexible,
+    showspaces=false,
+    showtabs=false,
+    breaklines=true,
+    showstringspaces=false,
+    breakatwhitespace=true,
+    escapeinside={(*@}{@*)},
+    commentstyle=\color{greencomments},
+    keywordstyle=\color{bluekeywords},
+    stringstyle=\color{redstrings},
+    numberstyle=\color{graynumbers},
+    basicstyle=\ttfamily\footnotesize,
+    frame=l,
+    framesep=12pt,
+    xleftmargin=12pt,
+    tabsize=4,
+    captionpos=b
+}

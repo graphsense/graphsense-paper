@@ -1,0 +1,22 @@
+% !TeX root = ../main.tex
+
+\section{Introduction}
+\label{sec:introduction}
+
+% Background / motivation
+In recent years, we have observed a rapidly increasing demand for cryptoasset analysis tools in industry and academia: businesses dealing with cryptoassets analyze transactions to fulfill compliance guidelines and regulations (c.f.,~\cite{sackheim:2020,fatf:2019}); law enforcement needs these techniques to track and trace illicit money flows (e.g.,~\cite{PaquetClouson:2019aa,PaquetClouson:2019bb}); designers of distributed ledger technology analyze deployed systems to make informed system design decisions~\cite{Stuetz:2020a}; business analysts and investors analyze transactional data to understand markets; and, last but not least, scientists from a wide range of academic disciplines use cryptoasset analytics tools to find answers to their research questions.
+
+% Most relevant related work
+At the moment, analysts can choose from two main options. On one hand, they can use commercial service offerings and analyze cryptoasset addresses and transactions via provided user interfaces and APIs. Neglecting the relatively high service costs, this has the advantage of a low entry barrier and availability of so-called attribution tags, which associate cryptoasset addresses with real-world actors such as exchanges. Alternatively, one can use free, open-source blockchain analytics tools like BlockSci~\cite{Kalodner:2020a}, which provides programmatic access to the full blockchain data and a highly efficient in-memory \emph{transaction graph} representation.
+
+% Our contribution
+In this paper, we present a third option: the \emph{GraphSense Cryptoasset Analytics Platform}, which is designed as an extensible and scalable analytics platform for running customized analytics tasks on data gathered from multiple blockchains and other contextually relevant sources, such as exchange rate services. Similar to commercial offerings, GraphSense also provides a dashboard for basic, interactive investigations, which lowers the entry barrier for non-expert users. Similar to BlockSci, it provides the flexibility to perform analytics tasks on pre-computed graph abstractions. However, in contrast to BlockSci, GraphSense provides access to the so-called \emph{address and entity graphs}, which reflect the main structural elements of cryptoasset ecosystems: actors, who interact with each other and are linked together through cryptoasset transfers (c.f.,~\cite{Reid:2013aa}). Furthermore, GraphSense introduces the notion of \emph{TagPacks}, which support collaborative collection and provenance-aware curation of attribution tags, which are valuable data points in most analytics tasks.
+
+% Impact / Vision
+Our vision was for GraphSense to become a general-purpose cryptoasset analytics platform that supports analysts in conducting microscopic, transaction-level investigations as well as more extensive macroscopic investigations on structural and dynamic aspects of cryptoasset ecosystems. Technically, GraphSense contributes reusable building blocks that can easily be integrated into an ETL or cryptoasset analytics pipeline. By being published\footnote{\url{https://github.graphsense.info}} under an open-source license, which permits reuse for commercial and non-commercial purposes, GraphSense has already attracted interest and contributions from third parties and could ultimately become a core technology for cryptoasset analytics research in academia and industry.
+
+% Overview
+In the following, in Section~\ref{sec:background}, we first provide some background information on graph-abstractions required for cryptoasset analytics and then present our rationale for designing GraphSense. We then present the technical design and the architecture of the GraphSense platform in Section~\ref{sec:design}, before we provide further details on TagPacks in Section~\ref{sec:tagpacks}. Finally, in Section~\ref{sec:discussion}, we provide some insight into known challenges and future development directions.
+
+% Versioning
+This paper currently describes version \gsversion of the GraphSense Cryptoasset Analytics Platform. It will be updated based on users' feedback and new features included in future releases.
